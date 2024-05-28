@@ -1,10 +1,11 @@
 let multiCircles = [];
-let multiCircleNum = 20; // Number of multiCircles
 let innerMultiCircleNum = 10; // Number of inner concentric circles
 let layerNum = 5; // Number of outer layers
 let dotSize = 10; // Size of the dots
 let dotDensity = 30; // Density of the dots
-const stepSize = 1; // Adjust to change the speed of animation
+const stepSize = 1; // Adjust to change the speed of downward movement
+const rotationStepSize = 0.5; // Adjust to change the speed of rotation
+const interval = 30; // Interval (in frames) between the creation of new multiCircles
 
 class MultiCircle {
   // Constructor to initialize the properties of multiCircle
@@ -91,7 +92,7 @@ class MultiCircle {
   // Update the position and angle of the multiCircle
   update() {
     this.y += stepSize; // Move downward
-    this.angle += stepSize; // Rotate
+    this.angle += rotationStepSize; // Rotate
 
     // If the multiCircle moves past the bottom of the canvas, reset to the top
     if (this.y - this.innerRadius > height) {
@@ -102,14 +103,7 @@ class MultiCircle {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
-  // Generate multiCircles at random positions along the top
-  for (let i = 0; i < multiCircleNum; i++) {
-    let x = random(width);
-    let y = random(-200, 0); // Start above the screen
-    let maxRadius = random(100, 200);
-    multiCircles.push(new MultiCircle(x, y, maxRadius, innerMultiCircleNum, layerNum));
-  }
+  frameRate(60); // Set frame rate to ensure consistent timing
 }
 
 function draw() {
@@ -120,6 +114,14 @@ function draw() {
   for (let mc of multiCircles) {
     mc.update();
     mc.display();
+  }
+
+  // Generate a new multiCircle at intervals
+  if (frameCount % interval === 0) {
+    let x = random(width);
+    let y = random(-200, 0); // Start above the screen
+    let maxRadius = random(100, 200);
+    multiCircles.push(new MultiCircle(x, y, maxRadius, innerMultiCircleNum, layerNum));
   }
 }
 
