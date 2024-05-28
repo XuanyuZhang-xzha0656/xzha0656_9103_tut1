@@ -1,9 +1,10 @@
 let multiCircles = [];
-let multiCircleNum = 20;// Number of multiCircles
+let multiCircleNum = 20; // Number of multiCircles
 let innerMultiCircleNum = 10; // Number of inner concentric circles
 let layerNum = 5; // Number of outer layers
 let dotSize = 10; // Size of the dots
 let dotDensity = 30; // Density of the dots
+const stepSize = 1; // Adjust to change the speed of animation
 
 class MultiCircle {
   // Constructor to initialize the properties of multiCircle
@@ -15,6 +16,8 @@ class MultiCircle {
     this.layerNum = layerNum;
     this.innerRadius = maxRadius / 2;
     this.dotRadius = 5;
+    this.angle = random(360); // Random initial angle
+
     // Allowed colors for inner concentric circles
     this.innerAllowedColors = [
       color(87, 98, 100),
@@ -57,14 +60,17 @@ class MultiCircle {
     // Draw the background circle with no stroke
     fill(231, 231, 224);
     noStroke();
-    ellipse(this.x, this.y, outerRadius * 2);
+    push();
+    translate(this.x, this.y);
+    rotate(this.angle);
+    ellipse(0, 0, outerRadius * 2);
 
     // Draw inner concentric circles
     noFill();
     for (let i = this.innerColors.length - 1; i >= 0; i--) {
       stroke(this.innerColors[i]);
       strokeWeight(5);
-      ellipse(this.x, this.y, this.innerRadius * (i + 1) / this.innerColors.length * 2);
+      ellipse(0, 0, this.innerRadius * (i + 1) / this.innerColors.length * 2);
     }
 
     // Draw outer circle dots
@@ -74,10 +80,22 @@ class MultiCircle {
       let angle = radians(i);
       for (let j = 0; j < this.layerNum; j++) {
         let radius = this.innerRadius + j * this.dotRadius * 2;
-        let x = this.x + cos(angle) * radius;
-        let y = this.y + sin(angle) * radius;
+        let x = cos(angle) * radius;
+        let y = sin(angle) * radius;
         ellipse(x, y, this.dotRadius * 2);
       }
+    }
+    pop();
+  }
+
+  // Update the position and angle of the multiCircle
+  update() {
+    this.y += stepSize; // Move downward
+    this.angle += stepSize; // Rotate
+
+    // If the multiCircle moves past the bottom of the canvas, reset to the top
+    if (this.y - this.innerRadius > height) {
+      this.y = -this.innerRadius;
     }
   }
 }
@@ -85,10 +103,10 @@ class MultiCircle {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  // Generate multiCircles at random positions
+  // Generate multiCircles at random positions along the top
   for (let i = 0; i < multiCircleNum; i++) {
     let x = random(width);
-    let y = random(height);
+    let y = random(-200, 0); // Start above the screen
     let maxRadius = random(100, 200);
     multiCircles.push(new MultiCircle(x, y, maxRadius, innerMultiCircleNum, layerNum));
   }
@@ -97,9 +115,10 @@ function setup() {
 function draw() {
   background(255);
   drawPolkaDotBackground();
-  
-  // Display all multiCircles
+
+  // Update and display all multiCircles
   for (let mc of multiCircles) {
+    mc.update();
     mc.display();
   }
 }
