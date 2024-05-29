@@ -101,14 +101,100 @@ class MultiCircle {
   }
 }
 
+//draw DunHuang style background
+//draw leaves
+class Leaf {
+  constructor(angle, innerRadius, outerRadius) {
+    this.angle = angle;
+    this.innerRadius = innerRadius;
+    this.outerRadius = outerRadius;
+    this.leafIndex = this.leafIndex;
+  }
+  
+  draw() {
+    push();
+    translate(width / 2, height / 2);
+    rotate(this.angle);
+    
+    // Define control points for the leaf shape
+    let x1 = this.innerRadius * cos(0);
+    let y1 = this.innerRadius * sin(0);
+    let x2 = this.outerRadius * cos(20);
+    let y2 = this.outerRadius * sin(20);
+    let x3 = this.outerRadius * cos(-20);
+    let y3 = this.outerRadius * sin(-20);
+    let x4 = this.outerRadius * cos(0);
+    let y4 = this.outerRadius * sin(0);
+    
+    stroke(203,128,37);
+    strokeWeight(2);
+    noFill();
+    
+    // Draw left side of the leaf
+    beginShape();
+    vertex(x1, y1);
+    //bezierVertex((x1 + x2) / 2, (y1 + y2) / 2, (x1 + x4) / 2, (y1 + y4) / 2, x4, y4);
+    bezierVertex(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2, x1 + (x4 - x1) / 2, y1 + (y4 - y1) / 2, x4, y4);
+    endShape();
+    
+    // Draw right side of the leaf
+    beginShape();
+    vertex(x1, y1);
+    //bezierVertex((x1 + x3) / 2, (y1 + y3) / 2, (x1 + x4) / 2, (y1 + y4) / 2, x4, y4);
+    bezierVertex(x1 + (x3 - x1) / 2, y1 + (y3 - y1) / 2, x1 + (x4 - x1) / 2, y1 + (y4 - y1) / 2, x4, y4);
+    endShape();
+    
+    // Draw center line of the leaf
+    line(x1, y1, x4, y4);
+    
+    pop();
+  }
+}
+//draw DunHuang style background
+class DunHuang {
+  constructor(bigCircleRadius, smallCircleRadius, numLeaves) {
+    this.bigCircleRadius = bigCircleRadius;
+    this.smallCircleRadius = smallCircleRadius;
+    this.numLeaves = numLeaves;
+    this.angleIncrement = radians(22.5); 
+  }
+
+  draw() {
+    //translate(width / 2, height / 2);
+    
+    let leafCircle = this.smallCircleRadius + 50;
+    
+    // Draw big circle
+    stroke(203,128,37);
+    strokeWeight(5);
+    fill(242,236,174);
+    ellipse(width/2, height/2, this.bigCircleRadius * 2, this.bigCircleRadius * 2);
+    
+    // Draw small circle
+    noFill();
+    stroke(170,123,26);
+    ellipse(width/2, height/2, this.smallCircleRadius * 2, this.smallCircleRadius * 2);
+    
+    // Draw 16 leaves
+    for (let i = 0; i < this.numLeaves; i++) {
+      let angle = i * this.angleIncrement;
+      let leaf = new Leaf(angle, leafCircle, this.bigCircleRadius);
+      leaf.draw();
+    }
+  }
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  //angleMode(DEGREES);
   frameRate(60); // Set frame rate to ensure consistent timing
 }
 
 function draw() {
   background(255);
   drawPolkaDotBackground();
+  let dunHuangBack = new DunHuang(350, 50, 16);
+  dunHuangBack.draw();
 
   // Update and display all multiCircles
   for (let mc of multiCircles) {
