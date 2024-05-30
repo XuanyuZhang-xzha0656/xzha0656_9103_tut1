@@ -71,6 +71,7 @@ For my individual assignment, I continued the colour scheme and key elements fro
 This is the first version of the animation that only adds the rotating drop effect.
 
 [![Tab-Sketch-v2.gif](https://img2.imgtp.com/2024/05/30/uqNSRym8.gif)](https://img2.imgtp.com/2024/05/30/uqNSRym8.gif)
+
 This is the second version, which keeps generating new multiCircle one by one.
 
 ### Add the DunHuang style pattern
