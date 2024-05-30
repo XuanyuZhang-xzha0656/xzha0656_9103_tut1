@@ -1,8 +1,8 @@
 let multiCircles = [];
 let innerMultiCircleNum = 10; // Number of inner concentric circles
 let layerNum = 5; // Number of outer layers
-let dotSize = 10; // Size of the dots
-let dotDensity = 30; // Density of the dots
+let dotSize = 20; // Size of the dots
+let dotDensity = 50; // Density of the dots
 const stepSize = 1; // Adjust to change the speed of downward movement
 const rotationStepSize = 0.5; // Adjust to change the speed of rotation
 const interval = 30; // Interval (in frames) between the creation of new multiCircles
@@ -108,7 +108,7 @@ class Leaf {
     this.angle = angle;
     this.innerRadius = innerRadius;
     this.outerRadius = outerRadius;
-    this.leafIndex = this.leafIndex;
+    
   }
   
   draw() {
@@ -177,10 +177,12 @@ class DunHuang {
     
     // Draw 16 leaves
     for (let i = 0; i < this.numLeaves; i++) {
+      //let angle = i * this.angleIncrement;
       let angle = i * this.angleIncrement;
       let leaf = new Leaf(angle, leafCircle, this.bigCircleRadius);
       leaf.draw();
     }
+    
   }
 }
 
@@ -217,7 +219,8 @@ function drawPolkaDotBackground() {
   noStroke();
   for (let y = 0; y < height; y += dotDensity) {
     for (let x = 0; x < width; x += dotDensity) {
-      ellipse(x, y, dotSize);
+      let size = dotSize * (1 + 0.5 * sin(TWO_PI * (frameCount * 0.008 + x / width)));
+      ellipse(x, y, size);
     }
   }
 }
