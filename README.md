@@ -18,20 +18,20 @@ There are three main elements in this piece, the animated elements are the multi
 ### Group Work
 The graphic for our group work was inspired by Pacita Abad's 'Wheels of fortune' and the colour scheme was inspired by the Dunhuang style, which is very characteristic of Chinese culture.
 
-![Wheels of fortune](assets/Pacita%20Abad%20Wheels%20of%20fortune.jpg)
+[![Pacita Abad Wheels of fortune.jpg](https://img2.imgtp.com/2024/05/30/23dRn1bE.jpg)](https://img2.imgtp.com/2024/05/30/23dRn1bE.jpg)
 
-![DunHuang](assets/Color_set.jpg)
+[![Color_set.jpg](https://img2.imgtp.com/2024/05/30/ZH6s2Soh.jpg)](https://img2.imgtp.com/2024/05/30/ZH6s2Soh.jpg)
 
 With the combination and redesign of the two, we created the group version of the picture.
 
-![Group Work](assets/Group%20work.png)
+[![Group work.png](https://img2.imgtp.com/2024/05/30/b6P5Yg59.png)](https://img2.imgtp.com/2024/05/30/b6P5Yg59.png)
 
 ### Individual Work
 For my individual assignment, I continued the colour scheme and key elements from my group work and added a pattern drawn from circles, curves and straight lines in the centre of the image, inspired by a Dunhuang style totem.
 
-![pattern inspiration](assets/DunHuang.jpg)
+[![DunHuang.jpg](https://img2.imgtp.com/2024/05/30/K8kW7FzQ.jpg)](https://img2.imgtp.com/2024/05/30/K8kW7FzQ.jpg)
 
-![recreate with dunhuang](assets/with_dunhuang.png)
+[![with_dunhuang.png](https://img2.imgtp.com/2024/05/30/QS7xI0yt.png)](https://img2.imgtp.com/2024/05/30/QS7xI0yt.png)
 
 ## Code Description
 ### Adding a rotating drop effect to multiCircle
@@ -66,11 +66,11 @@ For my individual assignment, I continued the colour scheme and key elements fro
   }
 
 ```
-![first version](assets/Tab-Sketch-v1.gif)
+[![Tab-Sketch-v1.gif](https://img2.imgtp.com/2024/05/30/dZOTIvi9.gif)](https://img2.imgtp.com/2024/05/30/dZOTIvi9.gif)
 
 This is the first version of the animation that only adds the rotating drop effect.
 
-![second version](assets/Tab-Sketch-v2.gif)
+[![Tab-Sketch-v2.gif](https://img2.imgtp.com/2024/05/30/uqNSRym8.gif)](https://img2.imgtp.com/2024/05/30/uqNSRym8.gif)
 This is the second version, which keeps generating new multiCircle one by one.
 
 ### Add the DunHuang style pattern
@@ -149,7 +149,7 @@ for (let i = 0; i < this.numLeaves; i++) {
       leaf.draw();
     }
 ```
-![DunHuang pattern](assets/with_dunhuang.png)
+[![with_dunhuang.png](https://img2.imgtp.com/2024/05/30/QS7xI0yt.png)](https://img2.imgtp.com/2024/05/30/QS7xI0yt.png)
 
 
 
@@ -169,5 +169,5 @@ function drawPolkaDotBackground() {
   }
 }
 ```
-![final effect](assets/Tab-Sketch-v3.gif)
+[![Tab-Sketch-v3.gif](https://img2.imgtp.com/2024/05/30/a9nWBr6Q.gif)](https://img2.imgtp.com/2024/05/30/a9nWBr6Q.gif)
 
