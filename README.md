@@ -1,82 +1,173 @@
-# xzha0656_9103_tut1
+# xzha0656_9103_tut1_Individual
 
 
-## Part1 Imaging Technique Inspiration
-### Music Visualization
-<!-- ## Heading2
-### Heading3
-#### Heading4
-##### Heading5
-###### Heading6 -->
+## Artwork Description:
+### outline
+I used a time based animation effect.
+The screen consists of three main elements: multiCircles that are randomly generated from the top and rotate down, a DunHuang style pattern in the centre of the screen and a polka dot background that creates a wave effect.
 
-<!-- *Italic*
-**Bold**
-***Bold Italic*** -->
+### Introduction to Elements and Animations
+There are three main elements in this piece, the animated elements are the multiCircle (consisting of several concentric circles inside and dots outside) and the polka dot background, and the static element is the DunHuang style pattern in the centre of the canvas.
 
-**Music visualization** is the process of turning sound into a waveform visible on the screen by capturing and analyzing the **spectral characteristics** of the sound. 
-In the example below, the artist took inspiration from *traditional Chinese landscape paintings*, extracted *colors* and *landscape features* from the paintings, and transformed a piece of traditional Chinese music into the form of a landscape painting, so that the viewer can visually feel the emotional ups and downs of the music, resulting in a better audio-visual experience.
-In a major project we can also use music visualization to make the painting change with the music.
+* **multiCircle:**
+  The multiCircle is randomly generated according to a fixed set of colours. multiCircle will be randomly generated continuously from the top of the canvas and rotate down.
+* **Polka dot background:**
+  The polka dot background is frame-timed, and each column of polka dots will grow larger and shrink back to its original shape in order to achieve a wave-like visual effect.
 
+## Work Inspiration:
+### Group Work
+The graphic for our group work was inspired by Pacita Abad's 'Wheels of fortune' and the colour scheme was inspired by the Dunhuang style, which is very characteristic of Chinese culture.
 
-<!-- - Item1
-    - Item2
+![Wheels of fortune](/assets/Pacita%20Abad%20Wheels%20of%20fortune.jpg)
 
+![DunHuang](/assets/Color_set.jpg)
 
-* Item 1
-* Item 2
-* Item 3
+With the combination and redesign of the two, we created the group version of the picture.
 
-1. Item 1
-2. Item 2
-3. Item 3
+![Group Work](/assets/Group%20work.png)
 
-| Header 1 | Header 2 |
-| --------- | --------- |
-| Cell 1     | Cell 2     |
-| Cell 3     | Cell 4     |
+### Individual Work
+For my individual assignment, I continued the colour scheme and key elements from my group work and added a pattern drawn from circles, curves and straight lines in the centre of the image, inspired by a Dunhuang style totem.
+
+![pattern inspiration](/assets/DunHuang.jpg)
+
+![recreate with dunhuang](/assets/with_dunhuang.png)
+
+## Code Description
+### Adding a rotating drop effect to multiCircle
+
+* Use `push()` and `pop()` to save and restore the drawing state.
+* Use `translate()` to move the drawing origin to the centre of the multiCircle and rotate it using `rotate()`.
+* Call `update()` every frame, increasing the `y`-coordinate for downward movement and `angle` for rotation
+* If the `multiCircle` moves out of the bottom of the canvas, reset its position to the top of the canvas.
+  
 
 ```
-public class HelloWorld {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
+    update() {
+    this.y += stepSize; // Move downward
+    this.angle += rotationStepSize; // Rotate
+
+    // If the multiCircle moves past the bottom of the canvas, reset to the top
+    if (this.y - this.innerRadius > height) {
+      this.y = -this.innerRadius;
     }
+  }
+```
+
+* In the `draw` function, the `frameCount` is checked every frame to see if the `interval` is reached, and if so, a new `MultiCircle` is generated.
+
+```
+ // Generate a new multiCircle at intervals
+  if (frameCount % interval === 0) {
+    let x = random(width);
+    let y = random(-200, 0); // Start above the screen
+    let maxRadius = random(100, 200);
+    multiCircles.push(new MultiCircle(x, y, maxRadius, innerMultiCircleNum, layerNum));
+  }
+
+```
+![first version](/assets/Tab-Sketch-v1.gif)
+
+This is the first version of the animation that only adds the rotating drop effect.
+
+![second version](/assets/Tab-Sketch-v2.gif)
+This is the second version, which keeps generating new multiCircle one by one.
+
+### Add the DunHuang style pattern
+The `Leaf` class is used to draw a single leaf, which is shaped by a Bezier curve.
+Initialise the angle and inner and outer radius of the leaf in the `constructor`.
+In the `draw` function:
+* Save and restore the drawing state using `push()` and `pop()`
+* Use `translate()` to move the origin to the centre of the canvas and `rotate()` to the specified angle
+* Define the control points for the shape of the leaf and draw a Bezier curve to form the leaf using the `bezierVertex()` function.
+* Draw the left and right curves of the leaf using `beginShape()` and `endShape()`.
+* Use `line()` to draw the centre line of the leaf.
+```
+class Leaf {
+  constructor(angle, innerRadius, outerRadius) {
+    this.angle = angle;
+    this.innerRadius = innerRadius;
+    this.outerRadius = outerRadius;
+    
+  }
+  
+  draw() {
+    push();
+    translate(width / 2, height / 2);
+    rotate(this.angle);
+    
+    // Define control points for the leaf shape
+    let x1 = this.innerRadius * cos(0);
+    let y1 = this.innerRadius * sin(0);
+    let x2 = this.outerRadius * cos(20);
+    let y2 = this.outerRadius * sin(20);
+    let x3 = this.outerRadius * cos(-20);
+    let y3 = this.outerRadius * sin(-20);
+    let x4 = this.outerRadius * cos(0);
+    let y4 = this.outerRadius * sin(0);
+
+```
+
+```
+beginShape();
+    vertex(x1, y1);
+    
+    bezierVertex(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2, x1 + (x4 - x1) / 2, y1 + (y4 - y1) / 2, x4, y4);
+    endShape();
+    
+    // Draw right side of the leaf
+    beginShape();
+    vertex(x1, y1);
+    
+    bezierVertex(x1 + (x3 - x1) / 2, y1 + (y3 - y1) / 2, x1 + (x4 - x1) / 2, y1 + (y4 - y1) / 2, x4, y4);
+    endShape();
+    
+    // Draw center line of the leaf
+    line(x1, y1, x4, y4);
+    
+    pop();
+  }
+  ```
+***Bezier curves related content and tutorials from [P5.js Curves](https://p5js.org/learn/curves.html)***
+
+Initialise the radius of the big and small circles in the `DunHuang` class, set the number of leaves and the angle increment.
+Draw the big circle and small circle in the `draw` function, and refer to the `draw` function in the Leaf class to draw all the leaves in a for loop.
+
+```
+ constructor(bigCircleRadius, smallCircleRadius, numLeaves) {
+    this.bigCircleRadius = bigCircleRadius;
+    this.smallCircleRadius = smallCircleRadius;
+    this.numLeaves = numLeaves;
+    this.angleIncrement = radians(22.5); 
+  }
+  ```
+```
+for (let i = 0; i < this.numLeaves; i++) {
+      //let angle = i * this.angleIncrement;
+      let angle = i * this.angleIncrement;
+      let leaf = new Leaf(angle, leafCircle, this.bigCircleRadius);
+      leaf.draw();
+    }
+```
+![DunHuang pattern](/assets/with_dunhuang.png)
+
+
+
+### Adding wave-like effect to the polka dot background
+Draw the polka dot background in the `drawPolkDotBackground `function. Calculate the size of the polka dots through a two-level for loop and the sinusoidal function `sin()`, so that the polka dots visually appear as waves that zoom in and out in each column in turn.
+
+```
+function drawPolkaDotBackground() {
+  // Draw polka dot background
+  fill(193, 110, 74);
+  noStroke();
+  for (let y = 0; y < height; y += dotDensity) {
+    for (let x = 0; x < width; x += dotDensity) {
+      let size = dotSize * (1 + 0.5 * sin(TWO_PI * (frameCount * 0.008 + x / width)));//let dot size change like wave 
+      ellipse(x, y, size);
+    }
+  }
 }
-``` -->
-
-
-![TheFamous Chinese Landscape Painting--Thousand Miles of Rivers and Mountains ](https://th.bing.com/th/id/R.97d426ec29b65a4ec294ba7a56b6d012?rik=gRMEG4yOkYsJIg&riu=http%3a%2f%2fwww.chinashj.com%2fuploads%2f160516%2f1-1605161IQAa.png&ehk=znbhlMEAuKxhwXNHls%2bzmbcbp9KZSJQiLTMudNW8YqI%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1)
-  *TheFamous Chinese Landscape Painting--Thousand Miles of Rivers and Mountains*
-
-
-![The sample1 of The inspiration video](assets/sample1.png)
-![The sample1 of The inspiration video](assets/sample2.png)
-
-*The sample screenshots of the inspiration video*
-
-
-[Video-Musical visualization combined with Chinese painting style](https://www.xiaohongshu.com/explore/6470db5c0000000013033662?app_platform=android&ignoreEngage=true&app_version=8.33.0&share_from_user_hidden=true&type=video&author_share=1&xhsshare=WeixinSession&shareRedId=N0s1QUc6PEE2NzUyOTgwNjY0OTc2SD85&apptime=1714386410&wechatWid=1b830e44cf4c528d4f2c9d20d7dba433&wechatOrigin=menu)
-
-[Other Musical visualization video with painting style](https://www.bilibili.com/video/BV1454y1477z/?spm_id_from=333.999.0.0&vd_source=77325193929488594248)
-
-[AI+TouchDesigner: Creating a case for tattoo sound visualization](https://www.bilibili.com/video/BV1or421t7T2/?spm_id_from=333.788.recommend_more_video.0&vd_source=8a99cf7769e2ddcda99b9141f7f177f3)
-
-## Part2 Coding Technique Exploration
-
-[Note Envelope](https://p5js.org/zh-Hans/examples/sound-note-envelope.html)
-
-[Oscillator Frequency](https://p5js.org/zh-Hans/examples/sound-oscillator-frequency.html)
-(*Notice: Example sound is a bit harsh, please lower the volume before opening this link!*)
-
-[Frequency Spectrum](https://p5js.org/zh-Hans/examples/sound-frequency-spectrum.html)
-
-[Filter LowPass](https://p5js.org/zh-Hans/examples/sound-filter-lowpass.html)
-
-[Filter BandPass](https://p5js.org/zh-Hans/examples/sound-filter-bandpass.html)
-
-[Wavemaker](https://p5js.org/examples/interaction-wavemaker.html)
-<!-- ## Heading2
-### Heading3
-#### Heading4
-##### Heading5
-###### Heading6 -->
+```
+![final effect](/assets/Tab-Sketch-v3.gif)
 

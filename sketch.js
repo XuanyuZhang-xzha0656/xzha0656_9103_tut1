@@ -130,6 +130,9 @@ class Leaf {
     strokeWeight(2);
     noFill();
     
+    //use vertex and bezierVertex to create leaves
+    //method from https://p5js.org/learn/curves.html
+  
     // Draw left side of the leaf
     beginShape();
     vertex(x1, y1);
@@ -219,12 +222,14 @@ function drawPolkaDotBackground() {
   noStroke();
   for (let y = 0; y < height; y += dotDensity) {
     for (let x = 0; x < width; x += dotDensity) {
-      let size = dotSize * (1 + 0.5 * sin(TWO_PI * (frameCount * 0.008 + x / width)));
+      let size = dotSize * (1 + 0.5 * sin(TWO_PI * (frameCount * 0.008 + x / width)));//let dot size change like wave 
       ellipse(x, y, size);
     }
   }
 }
 
+//resize the canvas to fit the window size
+//DunHuang pattern will always appear in the center of canvas 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
